@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добро пожаловать в смайлик кликер</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login">
+        <p style="color: #ff1515">Внимание! Если вы обнуляли прогресс перезапустите страницу перед логином. Иначе прогресс не обнулится.</p>
+        <input type="loginInp" id="loginInp">
+        <button id="readyLoginBtn" onclick="readyLogin()">Готово!</button>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+<div id="game" style="display: none">
+    <!-- Основа -->
+    <h1>Добро пожаловть, <span id="welcomeName">Player</span></h1>
+    <div id="rBox">
+    <h1 id="txt" style="color: #11ff00">Привет</h1>
+    </div>
+    <p id="scorer">0</p>
+    <button id="smile" onclick="tap()">😃</button>
+    <!-- Выбор вкладок -->
+    <button class="bBtn" id="shopBtn" onclick="openShop()">Магазин</button>
+    <button class="bBtn" id="inventoryBtn" onclick="openInventory()">Инвентарь</button>
+    <button class="bBtn" id="stateBtn" onclick="openState()">Статистика</button>
+    <button class="bBtn" id="infoBtn" onclick="openInfo()">Инфо</button>
+    <button class="bBtn" id="settingsBtn" onclick="openSettings()">Настройки</button>
+    
+    
+    <!-- Магазин -->
+    <div class="box" id="shop" style="display: none">
+        <button id="upsBtn" onclick="selectUps()">Апгрейды</button>
+        <button id="skinsBtn" onclick="selectSkins()">Скины</button>
+        
+        <!-- Контейнер с апгрейдами -->
+        <div id="upsBox" style="display: none">
+            
+            <!-- Сила клика -->
+            <button class="up" id="up1" onclick="byUp1()">Сила клика +1! Стоимость: <span id="txtCostUp1">100</span></button>
+            <br><br>
+            <button class="up" id="up3" onclick="byUp3()">Сила клика +3! Стоимость: <span id="txtCostUp3">500</span></button>
+            <br><br>
+            <button class="up" id="up4" onclick="byUp4()">Сила клика +5! Стоимость: <span id="txtCostUp4">1000</span></button>
+            <br><br>
+            <button class="up" id="up5" onclick="byUp5()">Сила клика +10! Стоимость: <span id="txtCostUp5">5000</span></button>
+            <br><br>
+            
+            
+            
+            <!-- Сила автоклика -->
+            <button class="up" id="up2" onclick="byUp2()">Сила автоклика +1! Стоимость: <span id="txtCostUp2">300</span></button>
+        </div>
+        
+        <!-- Контейнер со скинами -->
+        <div id="skinsBox" style="display: none">
+            <div class="smileX" id="shopS1">
+                <p id="name">😅</p>
+                <button id="useSmile" onclick="byS1()">Купить (100)</button>
+            </div>
+            <div class="smileX" id="shopS2">
+                <p id="name">🤣</p>
+                <button id="useSmile" onclick="byS2()">Купить (100)</button>
+            </div>
+            <div class="smileX" id="shopS3">
+                <p id="name">😂</p>
+                <button id="useSmile" onclick="byS3()">Купить (100)</button>
+            </div>
+            <div class="smileX" id="shopS4">
+                <p id="name">🤬</p>
+                <button id="useSmile" onclick="byS4()">Купить (100)</button>
+            </div>
+            <div class="smileX" id="shopS5">
+                <p id="name">🤩</p>
+                <button id="useSmile" onclick="byS5()">Купить (100)</button>
+            </div>
+            <div class="smileX" id="shopS6">
+                <p id="name">😱</p>
+                <button id="useSmile" onclick="byS6()">Купить (100)</button>
+            </div>
+            <div class="smileX" id="shopS7">
+                <p id="name">🥳</p>
+                <button id="useSmile" onclick="byS7()">Купить (100)</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Инвентарь -->
+    <div class="box" id="inventory" style="display: none">
+        <div class="smileX" id="smile0">
+            <p id="name">😃</p>
+            <button id="useSmile" onclick="smile.textContent = skins[0];">Использовать</button>
+        </div>
+        <div class="smileX" id="smile1" style="display: none">
+            <p id="name">😅</p>
+            <button id="useSmile" onclick="smile.textContent = skins[1];">Использовать</button>
+        </div>
+        <div class="smileX" id="smile2" style="display: none">
+            <p id="name">🤣</p>
+            <button id="useSmile" onclick="smile.textContent = skins[2];">Использовать</button>
+        </div>
+        <div class="smileX" id="smile3" style="display: none">
+            <p id="name">😂</p>
+            <button id="useSmile" onclick="smile.textContent = skins[3];">Использовать</button>
+        </div>
+        <div class="smileX" id="smile4" style="display: none">
+            <p id="name">🤬</p>
+            <button id="useSmile" onclick="smile.textContent = skins[4];">Использовать</button>
+        </div>
+        <div class="smileX" id="smile5" style="display: none">
+            <p id="name">🤩</p>
+            <button id="useSmile" onclick="smile.textContent = skins[5];">Использовать</button>
+        </div>
+        <div class="smileX" id="smile6" style="display: none">
+            <p id="name">😱</p>
+            <button id="useSmile" onclick="smile.textContent = skins[6];">Использовать</button>
+        </div>
+        <div class="smileX" id="smile7" style="display: none">
+            <p id="name">🥳</p>
+            <button id="useSmile" onclick="smile.textContent = skins[7];">Использовать</button>
+        </div>
+        <!-- Потом будет больше предметов -->
+    </div>
+    
+    <!-- Статистика -->
+    <div class="box" id="stateB" style="display: none">
+       <p>Кликов: <span id="clicksS">0</span></p>
+       <p>Смайликов: <span id="smileysS">0</span></p>
+       <p>За один клик: <span id="onclickS">1</span></p>
+       <p>В секунду: <span id="passiveIncomeS">0</span></p>
+    </div>
+    
+    <!-- Инфо -->
+    <div class="box" id="infoB" style="display: none">
+      <h1>Об игре: </h1>
+       <p>Версия: 1.0 beta</p>
+       <p>Дата выпуска: NA</p>
+       <p>Создатель: BoccNK4056</p>
+       <br>
+       <h1>Как играть?</h1> 
+       <p>Кликайте на смайлик, покупате улучшения и новые смайлики! Экипировать их можно в инвентаре! Станьте.... ЛУЧШИМ!!!</p>
+       <h1>От создателя: </h1>
+       <p>Всем привет! Я BoccNK4056, создатель этой игры. Я искренне извеняюсь за все баги в этой игре. Я не совсем опытный разработчик, поэтому в игре ОЧЕНЬ много багов. Один из них это баг с анти-читом. Просто перезайдите если вас заблокало. Спасибо за понимание!</p>
+    </div>
+    
+    <!-- Настройки -->
+    <div class="box" id="settingsB" style="display: none">
+        <button id="useRepOff" onclick="repOff()">Выключить реплики</button>
+        <br><br>
+        <button id="useRepOn" onclick="repOn()">Включить реплики</button>
+    </div>
+    <button id="reloginBtn" onclick="relogin()">Изменить имя (полная очистка прогреса)</button>
+</div>
+    
+    
+    <div style="display: none" id="antiCheatOverlay" class="ban">Подозрение на использование читов. Доступ заблокирован.</div>
+    <script src="script.js"></script>
+</body>
+  </html>
