@@ -46,7 +46,7 @@ body {
     font-weight: bold;
 }
 
-#loginInp {
+.loginInp {
     width: 100%;
     padding: 18px 25px;
     font-size: 1.3rem;
@@ -61,17 +61,17 @@ body {
     backdrop-filter: blur(5px);
 }
 
-#loginInp:focus {
+.loginInp:focus {
     border-color: #FFD700;
     background: rgba(255, 255, 255, 0.25);
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
-#loginInp::placeholder {
+.loginInp::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
 
-#readyLoginBtn {
+.readyBtn {
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     border: none;
     color: white;
@@ -86,12 +86,12 @@ body {
     letter-spacing: 1px;
 }
 
-#readyLoginBtn:hover {
+.readyBtn:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(0, 242, 254, 0.5);
 }
 
-#readyLoginBtn:active {
+.readyBtn:active {
     transform: translateY(0);
 }
 
@@ -274,9 +274,9 @@ body {
 
 /* Кнопки апгрейдов */
 .up {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: #00ff00;
     border: none;
-    color: white;
+    color: #fff100;
     padding: 18px 25px;
     border-radius: 15px;
     cursor: pointer;
@@ -296,16 +296,8 @@ body {
     transform: translateY(0);
 }
 
-/* Инвентарь */
-.box {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 20px;
-    padding: 30px;
-}
-
 .smileX {
-    background: rgba(255, 255, 255, 0.15);
+    background: #00000000;
     padding: 20px;
     border-radius: 15px;
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -320,6 +312,22 @@ body {
 #name {
     font-size: 3rem;
     margin-bottom: 10px;
+}
+
+.btnG {
+    background: rgba(76, 175, 80, 0.8);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.btnG:hover {
+    background: rgba(76, 175, 80, 1);
+    transform: scale(1.05);
 }
 
 #useSmile {
@@ -480,3 +488,62 @@ body, button, div, input {
     align-items: center;
     z-index: 9999;
   }
+  
+  animation: fnafShake 0.5s infinite alternate;
+  @keyframes fnafShake { from { transform: translateX(-2px); } to { transform: translateX(2px); } }
+  
+  .showInfoBox {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ff0;
+  color: #f00;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  z-index: 1000;
+  max-width: 300px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.showWarningBox {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #f00;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  z-index: 1000;
+  max-width: 300px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.use-btn {
+    background: rgba(76, 175, 80, 0.8); /* зелёный с прозрачностью */
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 1.1rem;
+    backdrop-filter: blur(8px);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.use-btn:hover {
+    background: rgba(76, 175, 80, 1);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.use-btn:active {
+    transform: scale(1);
+    }
