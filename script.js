@@ -1,4 +1,4 @@
-var smileys = 0;var smileys = 0;
+var smileys = 0;
 var mojno = true;
 var onclicky = 1;
 var passiveIncome = 0;
