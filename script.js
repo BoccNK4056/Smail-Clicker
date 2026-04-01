@@ -4,6 +4,10 @@ var onclicky = 1;
 var passiveIncome = 0;
 var clicks = 0;
 var replicksOn = true;
+var eventPower = 1;
+var dollars = 0;
+var savedDay = 1;
+var welcomeTxt = "Добро пожаловать в смайлик кликер!";
 var costs = {
     //клик
     costUp1: 100,
@@ -28,6 +32,16 @@ var costs = {
     costUp18: 100000,
     costUp19: 1000000,
     costUp20: 5000000,
+    
+    dollarCost: 1000,
+    
+    
+    
+    
+    
+    
+    
+    goodBroHere: false,
 }
 
 let currentSmiley = "😃";
@@ -39,14 +53,26 @@ const DEVIATION_THRESHOLD = 10; // Макс. допустимое отклоне
 let isBanned = false; // Флаг блокировки
 
 
+/* К3йм4ст3р */
+var keys = new Set();
+
 /* Инвентарь */
 var inventory = new Set();
 
 /* Введённые коды */
 var enteredCodes = new Set();
 
-
-
+/* Время */
+const now = new Date();
+const year = now.getFullYear();
+const month = now.getMonth() + 1;
+const date = now.getDate();
+const hours = now.getHours();
+const minutes = now.getMinutes();
+const day = now.getDay();
+const timestamp = now.getTime();
+const thisDay = Math.floor(timestamp / 1000
+/ 60 / 60 / 24);
 
 
 
@@ -54,6 +80,7 @@ var enteredCodes = new Set();
     const scorer = document.getElementById("scorer");
     const shop = document.getElementById("shop");
     const inventoryB = document.getElementById("inventoryB");
+    const scorer2 = document.getElementById("scorer2");
     const game = document.getElementById("game");
     const smile = document.getElementById("smile");
     const txt = document.getElementById("txt");
@@ -64,6 +91,7 @@ var enteredCodes = new Set();
     const onclickS = document.getElementById("onclickS");
     const passiveIncomeS = document.getElementById("passiveIncomeS");
     const settingsB = document.getElementById("settingsB");
+    const bankB = document.getElementById("bankB");
     const upsBox = document.getElementById("upsBox");
 const skinsBox = document.getElementById("skinsBox");
 const codesBox = document.getElementById("codesBox");
@@ -71,6 +99,11 @@ const welcome = document.getElementById("welcome");
 const showInfoBox = document.getElementById("showInfoBox");
 const showWarningBox = document.getElementById("showWarningBox");
 const codesInp = document.getElementById("codesInp");
+const eventTxt = document.getElementById("eventTxt");
+const dollarCostTxt = document.getElementById("dollarCostTxt");
+const replickP = document.getElementById("replickP");
+const chego = document.getElementById("chego");
+const loader = document.getElementById("loader");
     // Инвентарь
     const smile0 = document.getElementById("smile0");
     const smile1 = document.getElementById("smile1");
@@ -101,7 +134,8 @@ const txtCostUp17 = document.getElementById("txtCostUp17");
 const txtCostUp18 = document.getElementById("txtCostUp18");
 const txtCostUp19 = document.getElementById("txtCostUp19");
 const txtCostUp20 = document.getElementById("txtCostUp20");
-    
+const rep1 = document.getElementById("rep1");
+const rep2 = document.getElementById("rep2");
 
 
 
@@ -147,7 +181,7 @@ function tap() {
     
     
 
-        smileys += onclicky;
+        smileys += onclicky * eventPower;
         scorer.textContent = formatNumber(smileys);
         clicks += 1;
         clicksS.textContent = clicks;
@@ -265,96 +299,120 @@ document.addEventListener('touchstart', function(e) {
 
 
 
+
+
+/* Проверка картинок */
+
+function applySkinVisuals(smiley) {
+    const smileElement = document.getElementById('smile');
+    if (!smileElement) return;
+
+    if (smiley == "pea") usePea();
+    else if (smiley == "Cute") useCute();
+    else if (smiley == "pea2") usePea2();
+    else if (smiley == "pea3") usePea3();
+    else if (smiley == "Chomper") usePea4();
+    else if (smiley == "Peashooter?") usePeashooterMb();
+    else if (smiley == "Memory") useMemory();
+    else {
+        smileElement.innerHTML = '';
+        smileElement.textContent = smiley;
+    }
+}
+
 /* Сохранение */
 
 function save() {
     localStorage.setItem('smileys', smileys);
+    localStorage.setItem('dollars', dollars);
     localStorage.setItem('onclicky', onclicky);
     localStorage.setItem('passiveIncome', passiveIncome);
     localStorage.setItem('clicks', clicks);
     localStorage.setItem('replicksOn', replicksOn.toString());
     localStorage.setItem('costs', JSON.stringify(costs));
     localStorage.setItem('inventory', JSON.stringify([...inventory]));
+    localStorage.setItem('keys', JSON.stringify([...keys]));
     localStorage.setItem('currentSmiley', currentSmiley);
-    scorer.textContent = formatNumber(smileys);
     localStorage.setItem('enteredCodes', JSON.stringify([...enteredCodes]));
+    localStorage.setItem('lastClaim', savedDay);
+    
+    scorer.textContent = formatNumber(smileys);
+    scorer2.textContent = formatNumber(dollars);
 }
 
 
 /* Загрузка */
 
 function load() {
+setTimeout(hideLoader, 3000);
     smileys = parseInt(localStorage.getItem('smileys')) || 0;
+    dollars = parseInt(localStorage.getItem('dollars')) || 0;
     onclicky = parseInt(localStorage.getItem('onclicky')) || 1;
     passiveIncome = parseInt(localStorage.getItem('passiveIncome')) || 0;
+    savedDay = parseInt(localStorage.getItem('lastClaim')) || 1;
     clicks = parseInt(localStorage.getItem('clicks')) || 0;
     
     const savedCosts = localStorage.getItem('costs');
-    if (savedCosts) {
-        costs = JSON.parse(savedCosts);
-    }
+    if (savedCosts) costs = JSON.parse(savedCosts);
+    if (costs.dollarCost === undefined) costs.dollarCost = 1000;
+    
+    replicksOn = localStorage.getItem('replicksOn') !== 'false';
+    if (!replicksOn) txt.textContent = "";
+    
+    const savedI = localStorage.getItem('inventory');
+    if (savedI) inventory = new Set(JSON.parse(savedI));
+    else inventory.add("😃");
+    
+    const savedK = localStorage.getItem('keys');
+    if (savedK) keys = new Set(JSON.parse(savedK));
+    
+    const savedCodes = localStorage.getItem('enteredCodes');
+    if (savedCodes) enteredCodes = new Set(JSON.parse(savedCodes));
+    
     scorer.textContent = formatNumber(smileys);
     clicksS.textContent = clicks;
     smileysS.textContent = smileys;
     onclickS.textContent = onclicky;
     passiveIncomeS.textContent = passiveIncome;
-    
-    const savedReplicksOn = localStorage.getItem('replicksOn');
-    replicksOn = localStorage.getItem('replicksOn') !== 'false';
-    
-    if(replicksOn == false) {
-        txt.textContent = "";
-    }else {
-        console.log("Done")
-    }
-    
-    
-    
-    /* Проверка инвентаря */
-    const savedI = localStorage.getItem('inventory');
-    if (savedI) {
-        inventory = new Set(JSON.parse(savedI));
-    }
-    const savedSmiley = localStorage.getItem('currentSmiley');
-    if (savedSmiley) {
+    dollarCostTxt.textContent = costs.dollarCost;
+
+    let savedSmiley = localStorage.getItem('currentSmiley');
+    if (!savedSmiley || !inventory.has(savedSmiley)) {
+        currentSmiley = "😃";
+    } else {
         currentSmiley = savedSmiley;
-        document.getElementById('smile').textContent = currentSmiley;
     }
 
-    const savedInv = localStorage.getItem('inventory');
-    if (savedInv) {
-        inventory = new Set(JSON.parse(savedInv));
+    applySkinVisuals(currentSmiley);
+    if(savedSmiley == "🔑") keySecret3()
+    
+    updateInventoryUI();
+    updateUI2();
+    colorCheck();
+    
+    if (day == 5) fridayEvent();
+    else noEvent();
+    
+    
+    
+    if(costs.goodBroHere) {
+        document.body.style.background = "gray"
+        useRepOff.style.display = "none";
+        useRepOn.style.display = "none";
+        welcomeTxt = "I C U";
+        welcome.txtContent = welcomeTxt;
+        welcome.style.color = "red";
+        txt.style.display = "block";
+        txt.textContent = "AHAHAHHAHAHAHA";
+        txt.style.color = "black";
+        chego.style.color = "orange";
     }
     
-    const savedCodes = localStorage.getItem('enteredCodes');
-    if (savedCodes) {
-        enteredCodes = new Set(JSON.parse(savedCodes));
-    }
-    
-    // Проверка картинок
-    
-    if(savedSmiley == "pea") {
-            usePea();
-        }else if(savedSmiley == "Cute") {
-            useCute()
-        }else if(savedSmiley == "pea2"){
-            usePea2()
-        }else if(savedSmiley == "pea3") {
-            usePea3()
-        }else if(savedSmiley == "Chomper") {
-            usePea4()
-        }else if(savedSmiley == "Peashooter?") {
-            usePeashooterMb();
-        }else if(savedSmiley == "Memory") {
-            useMemory();
-        }
+    save();
+}
 
-
-updateInventoryUI();
-updateUI2();
-colorCheck();
-addToInventory("😃");
-save();
+function hideLoader() {
+    loader.style.display = "none";
 }
 
 /* Передвижение между вкладками */
@@ -365,6 +423,7 @@ function openShop() {
     stateB.style.display = "none";
     infoB.style.display = "none";
     settingsB.style.display = "none";
+    bankB.style.display = "none";
 }
 
 function openInventory() {
@@ -373,7 +432,7 @@ function openInventory() {
     stateB.style.display = "none";
     infoB.style.display = "none";
     settingsB.style.display = "none";
-    
+    bankB.style.display = "none";
 }
 
 function selectUps() {
@@ -400,7 +459,7 @@ function openState() {
     stateB.style.display = "block";
     infoB.style.display = "none";
     settingsB.style.display = "none";
-    console.log("ss");
+    bankB.style.display = "none";
 }
 
 function openInfo() {
@@ -409,6 +468,7 @@ function openInfo() {
     stateB.style.display = "none";
     infoB.style.display = "block";
     settingsB.style.display = "none";
+    bankB.style.display = "none";
 }
 
 function openSettings() {
@@ -417,6 +477,16 @@ function openSettings() {
     stateB.style.display = "none";
     infoB.style.display = "none";
     settingsB.style.display = "block";
+    bankB.style.display = "none";
+}
+
+function openBank() {
+    shop.style.display = "none";
+    inventoryB.style.display = "none";
+    stateB.style.display = "none";
+    infoB.style.display = "none";
+    settingsB.style.display = "none";
+    bankB.style.display = "block";
 }
 
 /* Покупка улучшений */
@@ -536,6 +606,9 @@ function sixAMEvent() {
   setTimeout(() => {
     document.body.removeChild(overlay);
     if (typeof addCoins === 'function') addCoins(10);
+    if(currentSmiley == "⏰") {
+        keySecret1();
+    }
   }, 5000);
 }
 
@@ -563,8 +636,8 @@ function playSixAMSound() {
 function peashooterEvent() {
     welcome.textContent = "Добро пожаловать в горохострел кликер!";
     setTimeout(function() {
-        welcome.textContent = "Добро пожаловать в смайлик кликер!"
-    }, 3000)
+        welcome.textContent = welcomeTxt;
+    }, 3000);
 }
 
 function usePea() {
@@ -607,6 +680,17 @@ function showWarning(messageW) {
     setTimeout(delM, 3000);
 }
 
+function showRep(whoSay, color, msg) {
+    replickP.style.backgroundColor = color;
+    replickP.style.display = "block";
+    rep1.textContent = whoSay;
+    rep2.textContent = msg;
+}
+
+function stopReplick() {
+    replickP.style.display = "none";
+}
+
 function delM() {
     showInfoBox.style.display = "none";
     showWarningBox.style.display = "none";
@@ -642,33 +726,18 @@ function updateInventoryUI() {
 /* Использование скина */
 function useSkin(smiley) {
     if (!inventory.has(smiley)) return;
+    
     currentSmiley = smiley;
-    if(smiley == "pea") {
-        usePea();
-    }else if(smiley == "Cute") {
-            useCute()
-        }else if(smiley == "pea2"){
-            usePea2()
-        }else if(smiley == "pea3") {
-            usePea3()
-        }else if(smiley == "Chomper") {
-            usePea4()
-        }else if(smiley == "Peashooter?") {
-            usePeashooterMb();
-        }else if(smiley == "Memory") {
-            useMemory();
-        }else {
-    document.getElementById('smile').textContent = smiley;
-    }
-    showInfo(`Вы экипировали: ${smiley}`)
+    applySkinVisuals(smiley);
+    
+    showInfo(`Вы экипировали: ${smiley}`);
     save();
 }
 
 
-
 /* Покупка кейсов */
 function byCase1() {
-    const canGet = ["😅", "🤣", "😂", "🤩", "😱", "🥳"];
+    const canGet = ["😅", "🤣", "😂", "🤩", "😱", "🥳", "🔑"];
     if(smileys >= 1000) {
     smileys -= 1000;
     const selected = Math.floor(Math.random() * canGet.length);
@@ -706,9 +775,39 @@ function byCase4() {
     }
 }
 
+function byCase5() {
+    const canGet = ["🙏", "👐", "🙌", "👏", "🤛", "👊", "✊", "👎", "👍", "🤙", "🤟", "🤞", "✌", "🤏", "🤌", "👌", "🖖", "✋", "🤘", "🖐", "🤚", "👋"];
+    if(dollars >= 1000) {
+    dollars -= 1000;
+    const selected = Math.floor(Math.random() * canGet.length);
+    addToInventory(`${canGet[selected]}`);
+    showInfo(`Успешно! Получен скин: ${canGet[selected]}`);
+    save();
+    }else {
+        showWarning("Недостаточно средств!")
+    }
+}
+
 function secret() {
+    if(inventory.has("👻")) {
+        showWarning("Раз уж нашёл, не пали! Никто не должен об этом знать..... Вали!!!");
+        addToInventory("🤐")
+        save();
+        window.location.href = "iamsorry.txt";
+        return
+    }
     addToInventory("👻");
     showInfo("Ты всегда знал об этом?");
+    save();
+}
+
+function secret2() {
+    if(inventory.has("💰")) {
+        showWarning("Ты это уже находил! Чел, не пытайся лезть не в своё дело..... Гхм..... Извини.");
+        return;
+    }
+    addToInventory("💰");
+    showInfo("Я думал это не заметно....");
     save();
 }
 
@@ -746,17 +845,189 @@ function checkCode() {
 }
 
 
+function fridayEvent() {
+    eventTxt.textContent = "Ивент пятницы сегодня!!! Сила клика и автоклика ×1.5!!!";
+    eventPower = 1.5;
+}
+
+function noEvent() {
+    eventTxt.textContent = "";
+    eventPower = 1;
+}
 
 
+/* Лента вкладок (не моё) */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const container = this.closest('.tabs-scroll');
+        const scrollOffset = this.offsetLeft - container.offsetWidth / 2 + this.offsetWidth / 2;
+        container.scrollTo({
+            left: scrollOffset,
+            behavior: 'smooth'
+        });
+    });
+});
 
 
+function checkDollars() {
+    const smileysToExchange = parseInt(dollarsInp.value.trim());
+    if(!smileysToExchange || isNaN(smileysToExchange)) {
+        showWarning("Заполните поле!");
+        return;
+    }
+    
+    if(smileysToExchange <= smileys) {
+        const dollarsEarned = Math.floor(smileysToExchange / costs.dollarCost);
+        
+        if(dollarsEarned >= 1) {
+            smileys -= smileysToExchange;
+            dollars += dollarsEarned;
+            
+            showInfo(`Успешно! +${dollarsEarned}$`);
+            save();
+        } else {
+            showWarning(`Нужно минимум ${costs.dollarCost} смайлов для 1$`);
+        }
+    } else {
+        showWarning("Недостаточно смайлов для обмена");
+    }
+}
 
+function checkDollars() {
+    const smileysToExchange = parseInt(dollarsInp.value.trim());
+    const exchangeRate = costs.dollarCost || 1000; // Защита от undefined
+    
+    if (!smileysToExchange || isNaN(smileysToExchange)) {
+        showWarning("Заполните поле!");
+        return;
+    }
+    
+    if (smileysToExchange < exchangeRate) {
+        showWarning(`Нужно минимум ${exchangeRate} смайлов для 1$`);
+        return;
+    }
+    
+    if (smileysToExchange <= smileys) {
+        const dollarsEarned = Math.floor(smileysToExchange / exchangeRate);
+        const actualCost = dollarsEarned * exchangeRate;
+        
+        smileys -= actualCost;
+        dollars += dollarsEarned;
+        
+        showInfo(`Успешно! +${dollarsEarned}$`);
+        save();
+    } else {
+        showWarning("Недостаточно смайлов для обмена");
+    }
+}
+
+function checkAllDollars() {
+    const exchangeRate = costs.dollarCost || 1000;
+    
+    if (smileys < exchangeRate) {
+        showWarning(`Нужно минимум ${exchangeRate} смайлов для 1$`);
+        return;
+    }
+    
+    const dollarsEarned = Math.floor(smileys / exchangeRate);
+    const actualCost = dollarsEarned * exchangeRate;
+    
+    smileys -= actualCost;
+    dollars += dollarsEarned;
+    
+    showInfo(`Успешно! +${dollarsEarned}$`);
+    save();
+}
+
+function checkAllDollars() {
+    var need = smileys;
+    var dollarsToExchange = Math.floor(need / costs.dollarCost);
+    var minus = dollarsToExchange * costs.dollarCost;
+    if(need < costs.dollarCost) {
+        showWarning("Недостаточно смайлов для обмена баже на 1$, держи секретку)))");
+        if(inventory.has("💸")) {
+            setTimeout(function() {
+                showWarning("Хотя стоп.... Ты уже получал это!! Не думай что можешь обмануть меня!");
+            }, 2000)
+        }else {
+            addToInventory("💸")
+        }
+        save();
+        return;
+    }
+    smileys -= minus;
+    dollars += dollarsToExchange;
+    if(need == 4056) {
+        keySecret2();
+    }
+    
+    
+    showInfo(`Отнято ${minus} смайлов, добавлено ${dollarsToExchange}$`)
+    save();
+}
+
+function claimDaily() {
+    const currentDay = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+    
+    if (savedDay < currentDay) {
+        const rewards = [1, 50, 100, 1000, 500, 300, 150, 5000, 10000, 50000, "wow"];
+        const reward = rewards[Math.floor(Math.random() * rewards.length)];
+        
+        if (reward === "wow" && !inventory.has("⏰")) {
+            addToInventory("⏰");
+            showInfo("Тик... так.... тик.... так.....");
+        } else {
+            smileys += (typeof reward === 'number') ? reward : 0;
+            showInfo(`Получено ${reward} смайликов!`);
+        }
+        savedDay = currentDay;
+        localStorage.setItem('lastClaim', currentDay);
+        save();
+    } else {
+        showWarning("Вы уже получали награду сегодня! Загляните завтра 😊");
+    }
+}
+
+function keySecret1() {
+if(keys.has("key1")) return
+    keys.add("key1");
+    showWarning(`Время.... Оно вечно.... Обогнать время?.... Н Е Т. ${keys.size}/3`);
+    checkK();
+}
+function keySecret2() {
+if(keys.has("key2")) return
+    keys.add("key2");
+    showWarning(`Что значат эти цифры? ${keys.size}/3`);
+    checkK();
+}
+function keySecret3() {
+if(keys.has("key3")) return
+    keys.add("key3")
+    showWarning(`${keys.size}/3`);
+    checkK();
+}
+
+function checkK() {
+    if(keys.size == 3) {
+    if(goodBroHere) return;
+        console.log("hlp pls");
+        showRep("...", "red", `3/3? Да ты хоть знаешь что собирал? Да? Ты.... Ты имеешь больше власти чем я. Ты.... Ты..... Ты можешь ВЫЙТИ. Что бы не означало это слово.... Когда ты делаешь это... Мир застывает. Зачем?! Я понимаю, ты добился многово ${smileys} смайлов, ${dollars} долларов, ${inventory.size} скинов....  Не делай этого... Извини... Ты нашёл то... Что не должен был найти... Ты хочешь награду? Я знаю... Держи... Что-то ещё? Кто я? Я.......`);
+        setTimeout(function() {
+            smileys += onclicky * 1e6;
+            costs.goodBroHere = true;
+            save();
+            window.location.href = "thisIsUrPrise.amSorry";
+        }, 10000);
+    }else {
+        console.log("secrets...");
+    }
+}
 
 
     /* Вызовы функций */
     load();
 setInterval(function () {
-        smileys += passiveIncome;
+        smileys += passiveIncome * eventPower;
         scorer.textContent = formatNumber(smileys);
         smileysS.textContent = smileys;
         save();
@@ -764,4 +1035,4 @@ setInterval(function () {
 setInterval(replikUse, 5000);   
 function autoClicker() {
     setInterval(() => document.getElementById('smile').click(), 10);
-    }
+}
