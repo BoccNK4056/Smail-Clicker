@@ -4,23 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Добро пожаловать в смайлик кликер!</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style2.css">
 </head>
 <body>
-<div id="all">
+<div id="game">
     <!-- Основа -->
     <h1 id="welcome">Добро пожаловть в смайлик кликер!</h1>
+    <h1 id="eventTxt" style="color: #0f0"></h1>
     <div id="rBox">
     <h1 id="txt" style="color: #11ff00">Привет</h1>
     </div>
-    <p id="scorer">0</p>
+    <br>
+    <h2 id="chego" style="color: #ff0">Смайликов:</h2>
+    <p id="scorer" class="scorer">0</p>
+    
     <button id="smile" onclick="tap()">😃</button>
     <!-- Выбор вкладок -->
-    <button class="bBtn" id="shopBtn" onclick="openShop()">Магазин</button>
-    <button class="bBtn" id="inventoryBtn" onclick="openInventory()">Инвентарь</button>
-    <button class="bBtn" id="stateBtn" onclick="openState()">Статистика</button>
-    <button class="bBtn" id="infoBtn" onclick="openInfo()">Инфо</button>
-    <button class="bBtn" id="settingsBtn" onclick="openSettings()">Настройки</button>
+<div class="tabs-container">
+    <div class="tabs-scroll">
+        <button class="tab-btn" onclick="openShop()">Магазин</button>
+        <button class="tab-btn" onclick="openInventory()">Инвентарь</button>
+        <button class="tab-btn" onclick="openState()">Статистика</button>
+        <button class="tab-btn" onclick="openInfo()">Инфо</button>
+        <button class="tab-btn" onclick="openSettings()">Настройки</button>
+        <button class="tab-btn" onclick="openBank()">Банк</button>
+    </div>
+</div>
     
     
     
@@ -106,6 +115,11 @@
                 <h1>1.1 кейс</h1>
                 <button onclick="byCase4()" class="btnG">Купить (1B)</button>
             </div>
+            
+            <div id="case3" class="box">
+                <h1>Супер кейс!</h1>
+                <button onclick="byCase5()" class="btnG">Купить (1000 dollars)</button>
+            </div>
         </div>
         
         
@@ -130,7 +144,8 @@
     <!-- Инфо -->
     <div class="box" id="infoB" style="display: none">
       <h1>Об игре: </h1>
-       <p>Версия: 1.1.0 beta</p>
+       <p>Название обновления: <span style="color: #ff0" onclick="secret2()">Делай деньги!</span></p>
+       <p>Версия: 1.2.0 beta</p>
        <p>Дата выпуска: NA</p>
        <p>Создатель: BoccNK4056</p>
        <br>
@@ -150,7 +165,28 @@
         <br><br>
         <button id="useRepOn" onclick="repOn()">Включить реплики</button>
         <br><br>
-        <button id="reloginBtn" onclick="relogin()">Обнулить прогресс</button>
+        <button id="reloginBtn" onclick="alert('Функция временно не работает')">Обнулить прогресс</button>
+    </div>
+    
+    <!-- Банк -->
+    <div class="box" id="bankB" style="display: none">
+        <div class="box">
+        <h2 style="color: #0f0">Долларов:</h2>
+        <h2 id="scorer2">0</h2>
+        </div>
+        <br>
+        <h1>Обменять смайлики на доллары</h1>
+        <br>
+        <h2 style="color: #ff0">Курс: <span id="dollarCostTxt">1000</span> смайликов/1$</h2>
+        <br>
+        <input type="number" class="loginInp" id="dollarsInp" placeholder="Сколько смайлов обменять?" min="1">
+        <button onclick="checkDollars()" class="readyBtn">Обменять</button>
+        <br><br>
+        <button onclick="checkAllDollars()" class="readyBtn">Обменять всё</button>
+        <br><br>
+        <h1>Ежедневная награда</h1>
+        <br>
+        <button class="readyBtn" onclick="claimDaily()">Забрать</button>
     </div>
     
     
@@ -159,9 +195,25 @@
     <div style="display: none" class="showInfoBox" id="showInfoBox"></div>
     <div style="display: none" class="showWarningBox" id="showWarningBox"></div>
     
+    <!-- Реплики персонажей -->
+    <div class="replickP" style="display: none" id="replickP" onclick="stopReplick()">
+        <h1 id="rep1"></h1>
+        <p id="rep2"></p>
+    </div>
+    
     
     <div style="display: none" id="antiCheatOverlay" class="ban">Подозрение на использование читов. Доступ заблокирован.</div>
+    
+    
+    <!-- лаудинг -->
+    <div class="loader-overlay" id="loader">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">Загрузка...</div>
+</div>
+    
+    
+    
     <script src="script.js"></script>
 </div>
 </body>
-                                          </html>
+  </html>
