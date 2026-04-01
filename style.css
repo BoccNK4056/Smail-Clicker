@@ -102,7 +102,7 @@ body {
 }
 
 /* Счетчик */
-#scorer {
+.scorer {
     font-size: 4.5rem;
     font-weight: bold;
     margin: 20px 0 40px;
@@ -117,7 +117,7 @@ body {
     display: inline-block;
 }
 
-#scorer:hover {
+.scorer:hover {
     transform: scale(1.05);
 }
 
@@ -546,4 +546,173 @@ body, button, div, input {
 
 .use-btn:active {
     transform: scale(1);
+}
+
+/* Стили для прокручиваемой ленты */
+.tabs-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 25px auto 15px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 12px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+}
+
+.tabs-scroll {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 12px;
+    padding: 8px 10px;
+    scrollbar-width: none; /* Firefox */
+    -webkit-overflow-scrolling: touch; /* Плавная прокрутка на мобильных */
+}
+
+.tabs-scroll::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+.tab-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    font-weight: 600;
+    min-width: 100px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+}
+
+.tab-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.tab-btn:active {
+    transform: translateY(0);
+}
+
+/* Основной контейнер */
+#replickP {
+    position: fixed;
+    bottom: 30px; /* Отступ от низа экрана */
+    left: 50%;
+    transform: translateX(-50%); /* Центрирование по горизонтали */
+    
+    width: 90%;
+    max-width: 500px; /* Чтобы на ПК не было слишком широко */
+    padding: 20px 25px;
+    
+    /* Стиль "пузыря" (как в Telegram) */
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* Тень для объема */
+    
+    /* Цвет фона (берется из JS или дефолтный серый) */
+    background-color: var(--dialog-bg, #4a4a4a);
+    
+    /* Текст по умолчанию белый */
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    cursor: pointer;
+    z-index: 9999;
+    
+    /* Анимация появления */
+    opacity: 0;
+    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Заголовок (rep1) */
+#replickP #rep1 {
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.3;
+}
+
+/* Текст (rep2) */
+#replickP #rep2 {
+    margin: 0;
+    font-size: 1rem;
+    color: #ffffff;
+    opacity: 0.9; /* Чуть прозрачнее для контраста */
+    line-height: 1.4;
+}
+
+/* Анимация выезда снизу */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 50px);
     }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+
+/* Основной контейнер на весь экран */
+.loader-overlay {
+    position: fixed; /* Фиксируем, чтобы не скроллился вместе со страницей */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    background-color: #4da6ff; /* Голубой цвет фона */
+    z-index: 9999; /* Гарантированно поверх всех остальных элементов */
+    
+    /* Центрируем содержимое по вертикали и горизонтали */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    /* Этот блок сам по себе перекрывает всё и блокирует клики, 
+       так как он сплошной и лежит сверху. */
+}
+
+/* Кружочек загрузки */
+.loader-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3); /* Полупрозрачный белый круг */
+    border-top: 6px solid #ffffff; /* Яркая белая полоска */
+    border-radius: 50%; /* Делаем круг */
+    
+    /* Запускаем анимацию */
+    animation: spin 1s linear infinite;
+    
+    margin-bottom: 20px; /* Отступ до текста */
+}
+
+/* Текст */
+.loader-text {
+    color: #ffffff;
+    font-family: sans-serif; /* Или твой шрифт */
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Сама анимация вращения */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
